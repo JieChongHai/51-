@@ -1,0 +1,70 @@
+<extend name="Public/common"/> <!-- 继承模板 -->
+<block name="main">
+    <div id="page-wrapper" class="gray-bg">
+        <include file="Public/nav-header"/>
+        <!-- Main content -->
+        <div class="wrapper wrapper-content">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <h5>商品类型管理</h5>
+                        </div>
+                        <div class="ibox-content">
+                            <!-- 新增和删除开始 -->
+                            <div class="col-sm-4">
+                                <div class="input-button">
+                                    <a href="{:U('addEditGoodsType')}">
+                                        <button class="btn btn-primary add" type="button"><i class="fa fa-plus"></i>&nbsp;新增</button>
+                                    </a>
+                                    <button class="btn btn-warning delete-all" type="button" url="/app/index.php/Admin/HighLevel/delAll.html"><i class="fa fa-minus "></i>&nbsp;删除</button>
+                                </div>
+                            </div>
+                            <!-- 新增和删除结束 -->
+
+                            <!--表格开始    -->
+                              <div id="ajax_return">
+                                    <table class="table table-bordered table-hover">
+                                        <thead>
+                                        <tr>
+                                            <th class="sorting text-center">ID</th>
+                                            <th class="sorting text-center">类型名</th>
+                                            <th class="sorting text-center">操作</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <volist name="goodsTypeList" id="list">
+                                            <tr>
+                                                <td class="text-center">{$list.id}</td>
+                                                <td class="text-center">{$list.name}</td>
+                                                <td class="text-center">
+                                                    <a href="{:U('Admin/GoodsAttribute/goodsAttributeList',array('type_id'=>$list['id']))}" title="" class="btn btn-info">
+                                                        <i class="fa fa-eye"></i>
+                                                    </a>
+                                                    <a href="{:U('addEditGoodsType',array('id'=>$list['id']))}"  title="" class="btn btn-primary">
+                                                        <i class="fa fa-pencil"></i>
+                                                    </a>
+                                                    <a href="javascript:del_fun('{:U('delGoodsType',array('id'=>$list['id']))}');"   class="btn btn-danger">
+                                                        <i class="fa fa-trash-o"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        </volist>
+                                        </tbody>
+
+                                    </table>
+                                  <!--分页开始-->
+                                  <div class="row">
+                                      <div class="col-sm-6 text-left"></div>
+                                      <div class="col-sm-6 text-right">{$page}</div>
+                                  </div>
+                                  <!--分页结束-->
+                              </div>
+                            <!--表格结束-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</block>

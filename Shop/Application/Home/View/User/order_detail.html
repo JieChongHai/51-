@@ -1,0 +1,106 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>订单详情-{$shop_config['shop_info_store_title']}</title>
+    <meta http-equiv="keywords" content="{$shop_config['shop_info_store_keyword']}" />
+    <meta name="description" content="{$shop_config['shop_info_store_desc']}" />
+</head>
+<body>
+<!--------头部开始-------------->
+<include file="Public/header" />
+<!--------头部结束-------------->
+<div class="layout pa-to-10 fo-fa-ar">
+    <!--菜单-->
+    <include file="User/menu" />
+    <!--菜单-->
+    <div class="fr wi940">
+        <div class="he50 wddd">
+            <div class="fl ddd-h2">
+                <h2><span>我的订单</span></h2>
+            </div>
+        </div>
+        <!-- 商品清单-start -->
+        <div class="o-info o-inff pi">
+            <div class="fl">
+                <span class=" ma-ri-15 fo-si-16">订单号: <a href="javascript:void(0);">{$order_info.order_sn}</a></span>
+            </div>
+        </div>
+        <div class="list-group-title">
+            <table class="merge-tab" border="0" cellpadding="0" cellspacing="0">
+                <thead>
+                <tr>
+                    <th class="col-pro">商品</th>
+                    <th class="col-price">单价/元</th>
+                    <th class="col-price">会员价</th>                    
+                    <th class="col-quty">数量</th>
+                    <th class="col-pay">小计/元</th>
+                    <th class="col-operate">状态</th>
+                </tr>
+                </thead>
+            </table>
+        </div>
+        <div class="merge-list">
+            <div class="ma-0--1">
+                <div class="o-pro">
+                    <table border="0" cellpadding="0" cellspacing="0">
+                        <tbody>
+                        <volist name="order_info.goods_list" id="good">
+                            <tr>
+                                <td class="col-pro-img">
+                                    <p>
+                                        <a href="{:U('Goods/goodsInfo',array('id'=>$good[goods_id]))}" target="_blank">
+                                            <img alt="{$good.goods_name}" src="{$good.goods_id|goods_thum_images=78,78}">
+                                        </a>
+                                    </p>
+                                </td>
+                                <td class="col-pro-info te-al-le"><p class="p-name"><a title="" target="_blank" href="{:U('Goods/goodsInfo',array('id'=>$good[goods_id]))}">{$good.goods_name}</a></p></td>
+                                <td class="col-price"><em>¥</em><span>{$good.goods_price}</span></td>
+                                <td class="col-price"><em>¥</em><span>{$good.member_goods_price}</span></td>                                
+                                <td class="col-quty">{$good.goods_num}</td>
+                                <td rowspan="1" class="col-pay"><p><em>¥</em><span>{$good['member_goods_price'] * $good['goods_num']}</span></p></td>
+                                <td rowspan="1" class="col-operate">                                    
+                                    <if condition="($order_info[return_btn] eq 1) and ($good[is_send] eq 1)">                                    
+                                        <p class="p-link"><a style="color:#999;" href="{:U('Home/User/return_goods',array('order_id'=>$order_info['order_id'],'order_sn'=>$order_info['order_sn'],'goods_id'=>$good['goods_id'],'spec_key'=>$good['spec_key']))}">申请退款</a></p>    
+                                    </if>
+                                    <if condition="($order_info.comment_btn eq 1) and ($good['is_comment'] eq 0)">
+                                        <p class="p-link"><a href="{:U('Home/User/comment')}" target="_blank"><span>评价</span></a></p>
+                                    </if>                                    
+                                </td>
+                            </tr>
+                        </volist>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="fr wcnhy">
+                <div class="fzoubddv" style="background-color:#FFF">
+                    <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                        <tbody>
+                        <tr>
+                            <td class="tal">商品总金额：</td>
+                            <td class="tar">&nbsp;¥&nbsp;
+                                <em id="order-cost-area">{$order_info.goods_price}</em>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="order-action-area te-al-ri cl-bo">
+                <div class="woypdbe sc-acti-list" style="background-color:#f5f5f5; padding:10px 0 20px 0">
+                    <span class="p-subtotal-price">合计（含运费）：<b>¥&nbsp;&nbsp;<span class="vab" id="payableTotal">{$order_info.order_amount}</span></b></span>
+                </div>
+            </div>
+        </div>
+        <!-- 商品清单-end -->
+    </div>
+</div>
+<div class="he80"></div>
+<!--------footer-开始-------------->
+<include file="Public/footer" />
+<!--------footer-结束-------------->
+
+</body>
+</html>

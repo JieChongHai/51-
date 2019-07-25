@@ -1,0 +1,122 @@
+<extend name="Public/common"/> <!-- 继承模板 -->
+<block name="main">
+<div id="page-wrapper" class="gray-bg">
+<include file="Public/nav-header"/>
+<style>
+    .search select { height: 34px}
+</style>
+    <div class="wrapper wrapper-content">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>商品列表管理</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="row">
+                            <!--搜索开始-->
+                            <form action="" id="search-form2" class="navbar-form form-inline" method="post" onsubmit="return false">
+                                <div class="search" style="padding: 10px">
+                                    <!-- 所有分类 -->
+                                    <select name="cat_id" id="cat_id" class="col-sm-2" >
+                                        <option value="">所有分类</option>
+                                        <foreach name="categoryList" item="v" key="k" >
+                                            <option value="{$v['id']}"> {$v['name']}</option>
+                                        </foreach>
+                                    </select>
+                                    <!-- 所有品牌 -->
+                                    <select name="brand_id" id="brand_id" class="col-sm-2">
+                                        <option value="">所有品牌</option>
+                                        <foreach name="brandList" item="v" key="k" >
+                                        <option value="{$v['id']}">{$v['name']}</option>
+                                        </foreach>
+                                    </select>
+                                    <!-- 上架/下架 -->
+                                    <select name="is_on_sale" id="is_on_sale" class="col-sm-2">
+                                        <option value="">上架/下架</option>
+                                        <option value="1">上架</option>
+                                        <option value="0">下架</option>
+                                    </select>
+                                    <!-- 新品/推荐 -->
+                                    <select name="intro" class="col-sm-2" >
+                                        <option value="0">新品/推荐</option>
+                                        <option value="is_new">新品</option>
+                                        <option value="is_recommend">推荐</option>
+                                    </select>
+                                    <!-- 关键词 -->
+                                    <div class="col-sm-3 input-group">
+                                        <input type="text" name="key_word" value="" placeholder="关键词" id="input-order-id" class="form-control">
+                                        <span class="input-group-btn">
+                                            <button type="submit" onclick="ajax_get_table('search-form2',1)" id="button-filter search-order" class="btn btn-primary"><i class="fa fa-search"></i> 筛选</button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </form>
+                            <!--搜索结束-->
+                            <!-- 新增和删除开始 -->
+                            <div class="col-sm-4">
+                                <div class="input-button">
+                                    <a href="{:U('Admin/goods/addEditGoods')}">
+                                        <button class="btn btn-primary add" type="button"><i class="fa fa-plus"></i>&nbsp;新增</button>
+                                    </a>
+                                    <button class="btn btn-warning delete-all" type="button" url="{:U('delAll')}"><i class="fa fa-minus "></i>&nbsp;删除</button>
+                                </div>
+                            </div>
+                            <!-- 新增和删除结束 -->
+                        </div>
+                        <!--表格开始    -->
+                        <div id="ajax_return"> </div>
+                        <!--表格结束-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function(){
+		// ajax 加载商品列表
+        ajax_get_table('search-form2',1);
+
+    });
+
+    // ajax 抓取页面 form 为表单id  page 为当前第几页
+    function ajax_get_table(form,page){
+		cur_page = page; //当前页面 保存为全局变量
+        $.ajax({
+            type : "POST",
+            url:"/index.php?m=Admin&c=goods&a=ajaxGoodsList&p="+page,//+tab,
+            data : $('#'+form).serialize(),// 你的formid
+            success: function(data){
+                $("#ajax_return").html('');
+                $("#ajax_return").append(data);
+            }
+        });
+    }
+      
+
+
+    // 删除操作
+    function del(id)
+    {
+        layer.confirm('确定要删除吗?',function(){
+            $.ajax({
+                url: "/index.php?m=Admin&c=goods&a=delGoods&id=" + id,
+                success: function (res) {
+                    console.log(res);
+                    if (res.status == 1) {
+                        layer.msg(res.msg,{icon:1,time:1000},function(){
+                            ajax_get_table('search-form2', cur_page);   // 回调到当前页面
+                            layer.closeAll();   // 关闭确认框
+                        });
+                    } else {
+                        layer.msg(res.msg, {icon: 2, time: 1000},function(){
+                            layer.closeAll();   // 关闭确认框
+                        });
+                    }
+                }
+            });
+        });
+    }
+</script>
+</block>

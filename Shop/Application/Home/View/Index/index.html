@@ -1,0 +1,251 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>首页-{$shop_config['shop_info_store_title']}</title>
+    <meta http-equiv="keywords" content="{$shop_config['shop_info_store_keyword']}" />
+    <meta name="description" content="{$shop_config['shop_info_store_desc']}" />
+</head>
+<body>
+<!--------头部开始-------------->
+<include file="Public/header" />
+<!--------头部结束-------------->
+<!-- 首页轮播图片 轮播js 广告-->
+<script src="__PUBLIC__/js/slider.js"></script>
+<script type="text/javascript">
+    // 首页轮播图片 轮播js 广告
+    $(function() {
+        var bannerSlider = new Slider($('#banner_tabs'), {
+            time: 5000,
+            delay: 400,
+            event: 'hover',
+            auto: true,
+            mode: 'fade',
+            controller: $('#bannerCtrl'),
+            activeControllerCls: 'active'
+        });
+        $('#banner_tabs .flex-prev').click(function() {
+            bannerSlider.prev()
+        });
+        $('#banner_tabs .flex-next').click(function() {
+            bannerSlider.next()
+        });
+    })
+</script>
+<!-- 首页轮播图片 轮播js 广告 end-->
+<!--------banner-开始-------------->
+<div class="nav-banner">
+    <div id="banner_tabs" class="flexslider">
+        <ul class="slides">
+            <foreach name="banner" item="v">
+                <li>
+                    <a href="{$v.ad_link}" <if condition="$v['target'] eq 1">target="_blank"</if>>
+                        <img src="{$v[ad_code]}" width="980" height="400"  title="{$v[title]}" style="{$v[style]}"/>
+                    </a>
+                </li>
+            </foreach>
+        </ul>
+
+        <ol id="bannerCtrl" class="flex-control-nav flex-control-paging">
+            <foreach name="banner" item="v" key="k">
+                <li><a>{$k}</a></li>
+            </foreach>
+        </ol>
+    </div>
+</div>
+<!--------banner-结束-------------->
+
+<!--------热卖-首发-新闻-公告-开始-------------->
+<div class="layout">
+    <!--热卖商品-->
+    <div class="bs-le">
+        <div class="first">
+            <ul>
+                <foreach name="best_seller" item="v">
+                    <li class="sellers">
+                        <div class="best">
+                            <div class="best-about">
+                                <div class="best_img" style="margin-top:50px; height:220px;">
+                                    <a href="{:U('/Home/Goods/goodsInfo',array('id'=>$v[goods_id]))}">
+                                        <img src="{$v.goods_id|goods_thum_images=180,180}" style="width:180px; height:180px;"/>
+                                    </a>
+                                </div>
+                                <div class="best_name">
+                                    <a href="{:U('/Home/Goods/goodsInfo',array('id'=>$v[goods_id]))}">
+                                        <span>{$v.goods_name|getSubstr=0,12}</span>
+                                    </a>
+                                </div>
+                                <div class="best_Introduction">
+                                    <div class="intr-t">{$v['goods_remark']|getSubstr=0,30}</div>
+                                    <div class="intr-b">买的更多更优惠</div>
+                                </div>
+                                <div class="price">
+                                    <span>¥</span><em>{$v['shop_price']}</em>
+                                </div>
+                                <div class="imm-button">
+                                    <a href="{:U('/Home/Goods/goodsInfo',array('id'=>$v[goods_id]))}"><span>立即抢购</span></a>
+                                </div>
+                                <div class="tag">
+                                    <if condition="$v['is_new'] eq '1'">
+                                        <img src="__PUBLIC__/images/hot.png" alt="热卖" />
+                                        <else/>
+                                        <img src="__PUBLIC__/images/shoufa.png" alt="首发" />
+                                    </if>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </foreach>
+            </ul>
+        </div>
+    </div>
+    <!--公告上方广告位-->
+    <div class="bs-ri">
+        <div class="ris-adve">
+                <a href="{$ad7[ad_link]}" <if condition="$ad7['target'] eq 1">target="_blank"</if>>
+                    <img src="{$ad7[ad_code]}" title="{$ad7[title]}" style="{$v[style]}"/>
+                </a>
+        </div>
+        <div class="ris-notice">
+            <div class="notice_t">
+                <ul>
+                    <li id="not_col"><a href="">公告</a></li>
+                    <li id="not_new"><a href="">新闻</a></li>
+                </ul>
+            </div>
+            <div class="notice_b">
+                <ul class="nob1">
+                    <foreach name="announcement" item="v">
+                        <li><a href="{:U('Home/Article/detail',array('article_id'=>$v[article_id]))}">{$v['title']|getSubstr=0,18}</a></li>
+                    </foreach>
+                </ul>
+                <ul class="nob2">
+                    <foreach name="news" item="v">
+                        <li><a href="{:U('Home/Article/detail',array('article_id'=>$v[article_id]))}">{$v['title']|getSubstr=0,18}</a></li>
+                    </foreach>
+                </ul>
+            </div>
+        </div>
+        <!--公告下方广告位-->
+        <div class="ris-as">
+            <p><a href="{$ad8[ad_link]}" <if condition="$v['target'] eq 1">target="_blank"</if> >
+                <img src="{$ad8[ad_code]}" width="278" height="132" title="{$ad8[title]}" style="{$ad8[style]}"></a>
+            </p>
+        </div>
+    </div>
+</div>
+
+</div>
+<!--------热卖-首发-新闻-公告-结束-------------->
+
+
+<!--------中部banner-开始-------------->
+<div class="layout">
+    <div class="cen-banne">
+        <a href="{$ad3['ad_link']}" <if condition="$ad3['target'] eq 1">target="_blank"</if>>
+            <img src="{$ad3['ad_code']}" width="1200" height="160"  title="{$ad3[title]}" style="{$ad3[style]}"/>
+        </a>
+    </div>
+</div>
+<!--------中部banner-结束-------------->
+
+<!--------楼层-开始-------------->
+<foreach name="category" item="val" key="category_name">
+    <div class="layout layer">
+        <div class="ground-flool">
+            <div class="flool-t">
+                <h2><a href="">{$category_name}</a></h2>
+                <foreach name="val['sub_category']" item="sub">
+                    <em>{$sub.name}</em>
+                </foreach>
+            </div>
+            <div class="flool-b layer">
+                <ul class="flool-cle">
+                    <foreach name="val['goods']" item="goods" key="key">
+                        <if condition="$key eq 0 ">
+                            <li class="sellers sell_ons">
+                                <div class="best">
+                                    <div class="best-about">
+                                        <div class="best_img best_img2">
+                                            <a href="{:U('/Home/Goods/goodsInfo',array('id'=>$goods['goods_id']))}"><img src="{$goods.goods_id|goods_thum_images=222,222}" /></a>
+                                        </div>
+                                        <div class="best_name">
+                                            <a href="{:U('/Home/Goods/goodsInfo',array('id'=>$goods['goods_id']))}"><span>{$goods.goods_name|getSubstr=0,18}</span></a>
+                                        </div>
+                                        <div class="best_Introduction">
+                                            <div class="intr-t">{$goods.keywords}</div>
+                                            <div class="intr-b">{$goods.goods_remark|getSubstr=0,51}</div>
+                                        </div>
+                                        <div class="price">
+                                            <span>¥</span><em>{$goods.shop_price}</em>
+                                        </div>
+                                        <div class="imm-button">
+                                            <a href="{:U('/Home/Goods/goodsInfo',array('id'=>$goods['goods_id']))}"><span>立即抢购</span></a>
+                                        </div>
+                                        <div class="tag">
+                                            <img src="__PUBLIC__/images/hot.png" alt="热卖" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        <else />
+                            <li class="sellers sellers2 sell_ons">
+                                <div class="best">
+                                    <div class="best-about">
+                                        <div class="best_img best_img2 best_img3">
+                                            <a href="{:U('/Home/Goods/goodsInfo',array('id'=>$goods['goods_id']))}"><img src="{$goods.goods_id|goods_thum_images=222,222}" /></a>
+                                        </div>
+                                        <div class="intr-t intr-t3">{$goods.goods_name|getSubstr=0,18}</div>
+                                        <div class="price prices">
+                                            <span>¥</span><em>{$goods.shop_price}</em>
+                                        </div>
+                                        <div class="tag">
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </if>
+                    </foreach>
+                </ul>
+            </div>
+        </div>
+    </div>
+</foreach>
+<!--------楼层-结束-------------->
+
+
+<!--------底部banner-开始-------------->
+<div class="layout layer">
+    <div class="cen-banne">
+        <a href="{$ad4['ad_link']}" <if condition="$ad4['target'] eq 1">target="_blank"</if>>
+            <img src="{$ad4['ad_code']}" width="1200" height="160" title="{$ad4[title]}" style="{$ad4[style]}"/>
+        </a>
+    </div>
+</div>
+<!--------底部banner-结束-------------->
+
+<!--------footer-开始-------------->
+<include file="Public/footer" />
+<!--------footer-结束-------------->
+<script>
+    $(document).ready(function(){
+        /* 新闻和公告的 js 切换*/
+        $(".nob2").css("display", "none");
+        $("#not_col").hover(function(){
+            $(".nob1").css("display", "block");
+            $(".nob2").css("display", "none");
+            $(this).css('background-color','#FFF');
+            $("#not_new").css('background-color','#fcf7f7');
+        });
+        /* 新闻和公告的 js 切换*/
+        $("#not_new").hover(function(){
+            $(".nob2").css("display", "block");
+            $(".nob1").css("display", "none");
+            $(this).css('background-color','#FFF');
+            $("#not_col").css('background-color','#fcf7f7');
+        })
+    });
+</script>
+
+</body>
+</html>

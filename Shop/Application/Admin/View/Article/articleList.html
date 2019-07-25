@@ -1,0 +1,119 @@
+<extend name="Public/common"/> <!-- 继承模板 -->
+<block name="main">
+	<div id="page-wrapper" class="gray-bg">
+		<include file="Public/nav-header"/>
+		<div class="wrapper wrapper-content">
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="ibox float-e-margins">
+						<div class="ibox-title">
+							<h5>文章列表管理</h5>
+						</div>
+						<div class="ibox-content">
+							<div class="row">
+								<!--搜索开始-->
+								<form class="navbar-form form-inline" action="{:U('Admin/Article/articleList')}" method="post">
+									<div class="form-group">
+										<input type="text" name="keywords" class="form-control" placeholder="搜索">
+									</div>
+									<div class="form-group">
+										<select name="cat_id" class="form-control" style="width:200px;">
+											<option value="">选择文章类别</option>
+											<foreach name="cats" item="vo">
+												<option value="{$vo.cat_id}" <if condition="$vo[cat_id] eq $cat_id">selected</if>>{$vo.cat_name}</option>
+											</foreach>
+										</select>
+									</div>
+									<button type="submit" class="btn btn-primary">提交</button>
+								</form>
+								<!--搜索结束-->
+								<!-- 新增和删除开始 -->
+								<div class="col-sm-4">
+									<div class="input-button">
+										<a href="{:U('Admin/Article/article')}">
+											<button class="btn btn-primary add" type="button"><i class="fa fa-plus"></i>&nbsp;新增</button>
+										</a>
+										<button class="btn btn-warning delete-all" type="button" url="{:U('delAll')}"><i class="fa fa-minus "></i>&nbsp;删除</button>
+									</div>
+								</div>
+								<!-- 新增和删除结束 -->
+							</div>
+							<!--表格开始    -->
+							<div class="box-body">
+								<div class="row">
+									<div class="col-sm-12">
+										<table id="list-table" class="table table-bordered table-striped dataTable" role="grid" aria-describedby="example1_info">
+											<thead>
+											<tr role="row">
+                                                <th class="text-center">
+                                                    <input type="checkbox" id="checkAll" class="check-all regular-checkbox">
+                                                    <label for="checkAll"></label>
+                                                </th>
+												<th class="text-center">文章标题</th>
+												<th class="text-center">文章类别</th>
+												<th class="text-center">显示</th>
+												<th class="text-center">发布时间</th>
+												<th class="text-center">操作</th>
+											</tr>
+											</thead>
+											<tbody>
+											<foreach name="list" item="vo" key="k" >
+												<tr role="row" align="center">
+                                                    <td>
+                                                        <input class="ids regular-checkbox" type="checkbox" value="{$vo.article_id}" name="ids[]" id="check_{$list.article_id}">
+                                                        <label for="check_{$list.article_id}"></label>
+                                                    </td>
+													<td>{$vo.title|getSubstr=0,33}</td>
+													<td>{$vo.category}</td>
+													<td>
+														<img width="20" height="20" src="__PUBLIC__/images/<if condition='$vo[is_open] eq 1'>yes.png<else />cancel.png</if>" onclick="changeTableVal('Article','article_id','{$vo.article_id}','is_open',this)"/>
+													</td>
+													<td>{$vo.add_time}</td>
+													<td>
+														<a target="_blank" href="{:U('Home/Article/detail',array('article_id'=>$vo['article_id']))}" data-toggle="tooltip" title="" class="btn btn-info" data-original-title="查看详情"><i class="fa fa-eye"></i></a>
+														<a class="btn btn-primary" href="{:U('Article/article',array('act'=>'edit','article_id'=>$vo['article_id']))}"><i class="fa fa-pencil"></i></a>
+														<a class="btn btn-danger" href="javascript:void(0)" data-url="{:U('Article/aticleHandle')}" data-id="{$vo.article_id}" onclick="delfun(this)"><i class="fa fa-trash-o"></i></a>
+													</td>
+												</tr>
+											</foreach>
+											</tbody>
+										</table>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-sm-6 text-left"></div>
+									<div class="col-sm-6 text-right">{$page}</div>
+								</div>
+							</div>
+							<!--表格结束-->
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+    <script src="__PUBLIC__/js/delete.js"></script>
+	<script>
+		function delfun(obj) {
+            layer.confirm('确认删除', function () {
+                $.ajax({
+                    type: 'post',
+                    url: $(obj).attr('data-url'),
+                    data: {act: 'del', article_id: $(obj).attr('data-id')},
+                    dataType: 'json',
+                    success: function (res) {
+                        if (res.status == 1) {
+                            layer.msg(res.msg, {icon: 1, time: 1000}, function () {
+                                $(obj).parent().parent().remove();
+                                layer.closeAll();
+                            });
+                        } else {
+                            layer.alert(res.msg, {icon: 2});  //alert('删除失败');
+                        }
+                    }
+                })
+            })
+        }
+	</script>
+</block>

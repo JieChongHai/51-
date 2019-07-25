@@ -1,0 +1,161 @@
+<extend name="Public/common"/> <!-- 继承模板 -->
+<block name="main">
+    <div id="page-wrapper" class="gray-bg">
+        <include file="Public/nav-header"/>
+        <div class="wrapper wrapper-content">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <h5>订单详情</h5>
+                        </div>
+                        <div class="ibox-content">
+                            <!--表格开始    -->
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title text-center">基本信息</h3>
+                                </div>
+                                <div class="panel-body">
+                                    <table class="table table-bordered">
+                                        <tbody>
+                                        <tr>
+                                            <td>订单 ID:</td>
+                                            <td>订单号:</td>
+                                            <td>会员:</td>
+                                            <td>E-Mail:</td>
+                                            <td>电话:</td>
+                                            <td>应付:</td>
+                                            <td>订单 状态:</td>
+                                            <td>下单时间:</td>
+                                            <td>支付时间:</td>
+                                            <td>支付方式:</td>
+                                        </tr>
+                                        <tr>
+                                            <td>{$order.order_id}</td>
+                                            <td>{$order.order_sn}</td>
+                                            <td><a href="#" target="_blank">{$order.consignee}</a></td>
+                                            <td><a href="#">{$order.email}</a></td>
+                                            <td>{$order.mobile}</td>
+                                            <td>{$order.order_amount}</td>
+                                            <td id="order-status">{$order_status[$order[order_status]]} / {$pay_status[$order[pay_status]]}<if condition="$order['pay_code'] eq 'cod'"><span style="color: red">(货到付款)</span></if> / {$shipping_status[$order[shipping_status]]}</td>
+                                            <td>{$order.add_time|date='Y-m-d H:i',###}</td>
+                                            <td><if condition="$order.pay_time neq 0">
+                                                {$order.pay_time|date='Y-m-d H:i',###}
+                                                <else/>
+                                                N
+                                            </if>
+                                            </td>
+                                            <td id="pay-type">
+                                                {$order.pay_name|default='其他方式'}
+                                            </td>
+                                        </tr>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title text-center">收货信息</h3>
+                                </div>
+                                <div class="panel-body">
+                                    <table class="table table-bordered">
+                                        <tbody><tr>
+                                            <td>收货人:</td>
+                                            <td>联系方式:</td>
+                                            <td>地址:</td>
+                                            <td>邮编:</td>
+                                        </tr>
+                                        <tr>
+                                            <td>{$order.consignee}</td>
+                                            <td>{$order.mobile}</td>
+                                            <td>{$order.address2}</td>
+                                            <td>
+                                                <if condition="$order.zipcode neq ''">
+                                                    {$order.zipcode}
+                                                    <else/>
+                                                    N
+                                                </if>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <!--新订单列表 商品信息-->
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title text-center">商品信息 </h3>
+                                </div>
+                                <div class="panel-body">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                        <tr>
+                                            <td class="text-left">商品</td>
+                                            <td class="text-left">属性</td>
+                                            <td class="text-right">数量</td>
+                                            <td class="text-right">单品价格</td>
+                                            <td class="text-right">会员折扣价</td>
+                                            <td class="text-right">单品小计</td>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <volist name="orderGoods" id="good">
+                                            <tr>
+                                                <td class="text-left"><a href="{:U('Home/Goods/goodsInfo',array('id'=>$good['goods_id']))}" target="_blank">{$good.goods_name}</a>
+                                                </td>
+                                                <td class="text-left">{$good.goods_attr}</td>
+                                                <td class="text-right">{$good.goods_num}</td>
+                                                <td class="text-right">{$good.goods_price}</td>
+                                                <td class="text-right">{$good.member_goods_price}</td>
+                                                <td class="text-right">{$good.goods_total}</td>
+                                            </tr>
+                                        </volist>
+                                        <tr>
+                                            <td colspan="4" class="text-right">小计:</td>
+                                            <td class="text-right">{$order.goods_price}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+
+                                </div>
+                            </div>
+                            <!--表格结束-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function pay_cancel(obj){
+            var url =  $(obj).attr('data-url')+'/'+Math.random();
+            layer.open({
+                type: 2,
+                title: '退款操作',
+                shadeClose: true,
+                shade: 0.8,
+                area: ['45%', '50%'],
+                content: url,
+            });
+        }
+
+
+        // 弹出退换货商品
+        function selectGoods2(order_id){
+            var url = "/index.php?m=Admin&c=Order&a=get_order_goods&order_id="+order_id;
+            layer.open({
+                type: 2,
+                title: '选择商品',
+                shadeClose: true,
+                shade: 0.8,
+                area: ['60%', '60%'],
+                content: url,
+            });
+        }
+
+    </script>
+</block>

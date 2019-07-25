@@ -1,0 +1,11 @@
+[ 2017-09-28T13:24:26+08:00 ] 127.0.0.1 /index.php?m=Home&c=api&a=get_category&parent_id=1
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.001000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.002000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.002000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.002000s ]
+SQL: SHOW COLUMNS FROM `goods_category` [ RunTime:0.0140s ]
+SQL: SELECT * FROM `goods_category` WHERE ( parent_id = 1 )  [ RunTime:0.0020s ]
+NOTIC: [8] Undefined variable: html D:\phpStudy\WWW\shop\Application\Home\Controller\ApiController.class.php 第 51 行.
+

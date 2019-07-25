@@ -1,0 +1,172 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>个人信息-{$shop_config['shop_info_store_title']}</title>
+    <meta http-equiv="keywords" content="{$shop_config['shop_info_store_keyword']}" />
+    <meta name="description" content="{$shop_config['shop_info_store_desc']}" />
+    <link rel="stylesheet" href="__PUBLIC__/css/index.css" type="text/css">
+    <script src="__PUBLIC__/js/jquery-1.10.2.min.js"></script>
+    <script src="__PUBLIC__/js/slider.js"></script>
+    <script src="__PUBLIC__/static/layer/layer.js"></script><!--弹窗js 参考文档 http://layer.layui.com/-->
+</head>
+
+<body>
+<!--------头部开始-------------->
+<include file="Public/header" />
+<!--------头部结束-------------->
+<div class="layout pa-to-10 fo-fa-ar">
+    <!--菜单-->
+    <include file="User/menu" />
+    <!--菜单-->
+    <div class="fr wi940">
+        <div class="xgzl-w">
+            <form action="" method="post">
+                <dl>
+                    <dd class="te-al po-re wi230 fl">
+                        <img class="headpic" src="{$user.head_pic|default='__PUBLIC__/images/headPic.jpg'}" />
+                        <input type="hidden" name="head_pic" id="head_pic" value="{$user.head_pic}">
+                        <div class="upload" onClick="uploadAvatar()">上传图像</div>
+                    </dd>
+                    <dd class="fl ta-tldf">
+                        <table style="width:700px;">
+                            <tbody>
+                            <tr>
+                                <td class="cl_left">昵称：</td>
+                                <td>
+                                    <div class="dv_cell_left">
+                                        <input type="text" name="nickname" class="imput_text vam" id="nickname" maxlength="20" autocomplete="off" value="{$user.nickname}" />
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td class="cl_left">QQ：</td>
+                                <td>
+                                    <div class="dv_cell_left">
+                                        <input type="text" name="qq" class="imput_text vam" id="userInfo_nickName" maxlength="20" autocomplete="off" value="{$user.qq}" onpaste="this.value=this.value.replace(/[^\d]/g,'')" onKeyUp="this.value=this.value.replace(/[^\d]/g,'')" />
+                                        <span id="msg_nickName"></span>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="cl_left">邮箱：</td>
+                                <td>
+                                    <div class="dv_cell_left">
+                                        <span class="check"> {$user.email}</span>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="cl_left">手机：</td>
+                                <td>
+                                    <div class="dv_cell_left">
+                                        <span class="check">{$user.mobile}</span>
+                                            <a href="javascript:;" onclick="updateMobile()">点击修改</a>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="cl_left">密码：</td>
+                                <td>
+                                    <div class="dv_cell_left">
+                                        <a href="javascript:;" onclick="updatePassword()">更改</a>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td class="cl_left">性别：</td>
+                                <td>
+                                    <input type="radio" name="sex" checked="checked" id="gd_secret" <if condition="$user['sex'] eq '0'">checked</if> value="0"> <label for="gd_secret">保密</label>
+                                    <input type="radio" name="sex" id="gd_mile" style="margin-left:10px;" <if condition="$user['sex'] eq '1'">checked</if> value="1"> <label for="gd_mile">男</label>
+                                    <input type="radio" name="sex" id="gd_femile" style="margin-left:10px;" <if condition="$user['sex'] eq '2'">checked</if> value="2"> <label for="gd_femile">女</label>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td class="cl_left">城市地区：</td>
+                                <td>
+
+                                    <select  class="selec" name="province" id="province" onChange="get_city(this)" >
+                                        <option value="0">请选择省份</option>
+                                        <volist name="province" id="p">
+                                            <option <if condition="$user['province'] eq $p['id']">selected</if> value="{$p.id}">{$p.name}</option>
+                                        </volist>
+                                    </select>
+                                    <select  class="selec" name="city" id="city" onChange="get_area(this)">
+                                        <option value="0">请选择城市</option>
+                                        <volist name="city" id="p">
+                                            <option <if condition="$user['city'] eq $p['id']">selected</if> value="{$p.id}">{$p.name}</option>
+                                        </volist>
+                                    </select>
+                                    <select  class="selec" name="district" id="district">
+                                        <option value="0">请选择地区</option>
+                                        <volist name="area" id="p">
+                                            <option <if condition="$user['district'] eq $p['id']">selected</if> value="{$p.id}">{$p.name}</option>
+                                        </volist>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" align="left">
+                                    <input type="submit" value="保存" class="btn_midefy" id="btn_midefy">
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </dd>
+                </dl>
+            </form>
+
+        </div>
+    </div>
+</div>
+<div class="he80"></div>
+<script>
+    // 上传头像
+    function uploadAvatar(){
+        //iframe层
+        layer.open({
+            type: 2,
+            title: '上传头像',
+            shadeClose: true,
+            shade: 0.6,
+            area: ['860px', '600px'],
+            content: "{:U('meituAvatar')}" //iframe的url
+        });
+
+    }
+
+    //更改手机号
+    function updateMobile(){
+        //iframe层
+        layer.open({
+            type: 2,
+            title: '修改手机号码',
+            shadeClose: true,
+            shade: 0.6,
+            area: ['430px', '270px'],
+            content: "{:U('mobileForm')}" //iframe的url
+        });
+    }
+
+    //更改密码
+    function updatePassword(){
+        //iframe层
+        layer.open({
+            type: 2,
+            title: '更改密码',
+            shadeClose: true,
+            shade: 0.6,
+            area: ['430px', '270px'],
+            content: "{:U('passwordForm')}" //iframe的url
+        });
+    }
+</script>
+
+<!--------footer-开始-------------->
+<include file="Public/footer" />
+<!--------footer-结束-------------->
+</body>
+</html>

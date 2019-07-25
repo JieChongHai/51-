@@ -1,0 +1,101 @@
+<extend name="Public/common"/> <!-- 继承模板 -->
+<block name="main">
+    <div id="page-wrapper" class="gray-bg">
+        <include file="Public/nav-header"/>
+        <div class="wrapper wrapper-content">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <h5>收货地址列表</h5>
+                        </div>
+                        <div class="ibox-content">
+
+                            <!--表格开始    -->
+                            <div class="panel-body">
+
+
+                                <div class="table-responsive">
+                                    <table class="table table-bordered table-hover">
+                                        <thead>
+                                        <tr>
+
+                                            <td class="text-left">
+                                                收货人
+                                            </td>
+
+
+                                            <td class="text-left">
+                                                联系方式
+                                            </td>
+
+                                            <td class="text-left">
+                                                邮政编码
+                                            </td>
+
+                                            <td class="text-left">
+                                                地址
+                                            </td>
+
+
+
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <volist name="lists" id="list">
+                                            <tr>
+                                                <td class="text-left">{$list.consignee}</td>
+
+                                                <td class="text-left">{$list.mobile}</td>
+                                                <td class="text-left">
+                                                    {$list.zipcode}
+                                                </td>
+                                                <td class="text-left">
+                                                    {$regionList[$list[province]]},{$regionList[$list[city]]},{$regionList[$list[district]]},{$list.address}
+                                                </td>
+
+                                            </tr>
+                                        </volist>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+
+                            </div>
+                            <!--表格结束-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function(){
+            ajax_get_table('search-form2',1);
+
+        });
+
+        // ajax 抓取页面
+        function ajax_get_table(tab,page){
+            cur_page = page; //当前页面 保存为全局变量
+            $.ajax({
+                type : "POST",
+                url:"/index.php/Admin/user/ajaxindex/p/"+page,//+tab,
+                data : $('#'+tab).serialize(),// 你的formid
+                success: function(data){
+                    $("#ajax_return").html('');
+                    $("#ajax_return").append(data);
+                }
+            });
+        }
+
+        // 点击排序
+        function sort(field)
+        {
+            $("input[name='order_by']").val(field);
+            var v = $("input[name='sort']").val() == 'desc' ? 'asc' : 'desc';
+            $("input[name='sort']").val(v);
+            ajax_get_table('search-form2',cur_page);
+        }
+    </script>
+</block>

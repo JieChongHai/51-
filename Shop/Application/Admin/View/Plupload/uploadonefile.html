@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>Plupload多图上传</title>
+    <link type="text/css" rel="stylesheet" href="__PUBLIC__/plugins/jquery-ui-1.11.4/jquery-ui.min.css" media="screen" />
+    <link type="text/css" rel="stylesheet" href="__PUBLIC__/plugins/plupload/jquery.ui.plupload/css/jquery.ui.plupload.css" media="screen" />
+    <script type="text/javascript" src="__PUBLIC__/js/jquery-2.1.1.min.js" charset="UTF-8"></script>
+    <script type="text/javascript" src="__PUBLIC__/plugins/jquery-ui-1.11.4/jquery-ui.js" charset="UTF-8"></script>
+    <script type="text/javascript" src="__PUBLIC__/plugins/plupload/plupload.full.min.js" charset="UTF-8"></script>
+    <script type="text/javascript" src="__PUBLIC__/plugins/plupload/jquery.ui.plupload/jquery.ui.plupload.min.js" charset="UTF-8"></script>
+    <script type="text/javascript" src="__PUBLIC__/static/layer/layer.js" ></script>
+</head>
+<body class="examples examples-ui">
+<section id="content">
+    <div class="container">
+        <div id="example">
+            <div id="uploader">
+                <p>您的浏览器缺少Flash、Silverlight 或 HTML5支持</p>
+            </div>
+            <script type="text/javascript">
+                // Initialize the widget when the DOM is ready
+                $(function() {
+                    $("#uploader").plupload({
+                        // General settings
+                        runtimes : 'html5,flash,silverlight,html4',
+                        url : "{:U('Plupload/uploadPicture')}",   // 提交路径
+                        multi_selection: false,
+                        // Maximum file size
+                        max_file_size : '2mb',
+                        chunk_size: '1mb',
+                        multipart_params: {
+                            directory: "{$_GET['from']}"    // 传递参数
+                        },
+
+                        // Specify what files to browse for
+                        filters : [
+                            {title : "Image files", extensions : "jpg,gif,png,jpeg"},
+                        ],
+
+                        // Rename files by clicking on their titles
+                        rename: true,
+
+                        // Sort files
+                        sortable: true,
+
+                        // Enable ability to drag'n'drop files onto the widget (currently only HTML5 supports that)
+                        dragdrop: true,
+
+                        // Views to activate
+                        views: {
+                            list: true,
+                            thumbs: true, // Show thumbs
+                            active: 'thumbs'
+                        },
+
+                        // Flash settings
+                        flash_swf_url : '/plupload/js/Moxie.swf',
+
+                        // Silverlight settings
+                        silverlight_xap_url : '/plupload/js/Moxie.xap',
+
+                        init: {
+                            FilesAdded: function(up, files) {   // 添加文件
+                                var item = '';  // 初始化
+                                //遍历文件
+                                plupload.each(files, function(file) {
+                                    item += "<div class='item' id='" + file['id'] + "'></div>";
+                                });
+                                parent.$("#picture").append(item);
+                            },
+                            FileUploaded: function(up, file, info) {
+                                var data = eval("(" + info.response + ")");
+                                if(data.error != 0){
+                                    parent.$("#"+file.id).remove();     // 移除上传失败的图片div
+                                    layer.msg(data.error,{icon:2});     // 弹出错误信息
+                                    return false;
+                                }
+                                parent.$("#old_img").remove();         // 移除已有图片
+                                parent.$("#upload_pic img").hide();    // 隐藏添加图标
+                                var picture_name = parent.$('#picture').attr('name');
+                                // 拼接插入的图片样式
+                                var html_string = "<input type=hidden name='"+ picture_name + "' value='" + data.pic + "'><img src='" + data.pic + "' alt='" + data.name + "' width='100px' height='100px'>\n\
+                                                    <div class='operate'><i class='del'>删除</i></div>";
+                                parent.$("#" + file.id).html(html_string);
+
+                            },
+                            UploadComplete:function(){
+                                var index = parent.layer.getFrameIndex(window.name);
+                                layer.msg("操作成功",{time:1000},function(){
+                                    parent.layer.close(index);
+                                });
+                            }
+                        }
+                    });
+                });
+            </script>
+        </div>
+    </div>
+</section>
+
+</body>
+</html>

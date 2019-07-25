@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>成功提交订单-{$shop_config['shop_info_store_title']}</title>
+<meta http-equiv="keywords" content="{$shop_config['shop_info_store_keyword']}" />
+<meta name="description" content="{$shop_config['shop_info_store_desc']}" />
+</head>
+<body>
+    <script src="__PUBLIC__/js/jquery-1.10.2.min.js"></script>
+    <script src="__PUBLIC__/js/global.js"></script>
+    <script src="__PUBLIC__/js/common.js"></script>
+    <script src="__PUBLIC__/static/layer/layer.js"></script><!-- 弹窗js 参考文档 http://layer.layui.com/-->
+    <include file="Public/siteTopbar" />
+    <div class="order-header">
+    	<div class="layout after">
+        	<div class="fl">
+            	<div class="logo pa-to-36 wi345">
+                	<a href="/"><img src="{$shop_config['shop_info_store_logo']}" alt=""></a>
+                </div>
+            </div>
+        	<div class="fr">
+            	<div class="pa-to-36 progress-area">
+                	<div class="progress-area-wd" style="display:none">我的购物车</div>
+                	<div class="progress-area-tx" style="display:none">填写核对订单信息</div>
+                	<div class="progress-area-cg">成功提交订单</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="layout after-ta order-ha">
+    	<div class="erhuh">
+        	<i class="icon-succ"></i>
+            <h3>订单提交成功，请您尽快付款！</h3>
+            <p class="succ-p" id="order_sn" value="{$order['order_sn']}">订单号：&nbsp;&nbsp;{$order['order_sn']}</p>
+            <p>付款金额（元）：&nbsp;&nbsp;<b>{$order['order_amount']}</b>&nbsp;<b>元</b></p>
+        </div>
+        <div class="ddxq-xiaq">
+        	<a href="{:U('Home/User/order_detail',array('id'=>$order['order_id']))}">
+            	订单详情
+                <i></i>
+            </a>
+        </div>
+        <form action="{:U('Home/Payment/getCode')}" method="post" name="step4_form" id="step4_form">
+        <div class="orde-sjyy">
+        	<h3 class="titls">选择支付方式</h3>
+            <div class="bsjy-g">
+            	<dl>
+            		<dd>
+						<div class="order-payment-area">
+                        	<div class="dsfzfpte">
+                            	<b>选择支付方式</b>                               
+                            </div>
+                            <div class="po-re dsfzf-ee">
+                                <ul>
+                                    <li>
+                                        <div class="payment-area">
+                                            <input type="radio"  value="pay_code=alipay" class="radio vam" name="pay_radio" >
+                                            <label>
+                                                <img src="__PUBLIC__/images/alipay.jpg" width="120" height="40" onClick="change_pay(this);" />
+                                            </label>
+                                        </div>
+                                    </li>
+                                    <li>
+                                    <div class="payment-area">
+                                        <input type="radio" value="pay_code=weixin" class="radio vam" name="pay_radio" >
+                                        <label>
+                                            <img src="__PUBLIC__/images/weixin.jpg" width="120" height="40" onClick="change_pay(this);" />
+                                        </label>
+                                    </div>
+                                    </li>
+                                    <li>
+                                    <div class="payment-area">
+                                        <input type="radio"  value="pay_code=unionpay" class="radio vam" name="pay_radio" >
+                                        <label>
+                                            <img src="__PUBLIC__/images/unionpay.jpg" width="120" height="40" onClick="change_pay(this);" />
+                                        </label>
+                                    </div>
+                                </li><li>
+                                    <div class="payment-area">
+                                        <input type="radio"  value="pay_code=tenpay" class="radio vam" name="pay_radio" >
+                                        <label>
+                                            <img src="__PUBLIC__/images/tenpay.jpg" width="120" height="40" onClick="change_pay(this);" />
+                                        </label>
+                                    </div>
+                                </li>
+                                </ul>
+                            </div>
+                        </div>
+                    <!--第三方网银支付 start-->
+						<div class="order-payment-area">
+                        	<div class="dsfzfpte">
+                                <b>{$paymentList[$k]['name']}</b>
+                                <em>网银支付</em>
+                                </div>
+                            <div class="po-re dsfzf-ee">
+                                <ul>
+                                    <li>
+                                        <div class="payment-area">
+                                            <input type="radio" name="pay_radio" class="radio vam">
+                                            <label >
+                                                <img src="__PUBLIC__/images/to_cmb.jpg" width="120" height="40" onClick="change_pay(this);"/>
+                                            </label>
+                                        </div>
+                                    </li><li>
+                                    <div class="payment-area">
+                                        <input type="radio" name="pay_radio" class="radio vam">
+                                        <label >
+                                            <img src="__PUBLIC__/images/to_icbc.jpg" width="120" height="40" onClick="change_pay(this);"/>
+                                        </label>
+                                    </div>
+                                </li>
+                                    <li>
+                                    <div class="payment-area">
+                                        <input type="radio" name="pay_radio" class="radio vam">
+                                        <label >
+                                            <img src="__PUBLIC__/images/CCB_OUT.jpg" width="120" height="40" onClick="change_pay(this);"/>
+                                        </label>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="payment-area">
+                                        <input type="radio" name="pay_radio" class="radio vam">
+                                        <label >
+                                            <img src="__PUBLIC__/images/ABC_OUT.jpg" width="120" height="40" onClick="change_pay(this);"/>
+                                        </label>
+                                    </div>
+                                </li>
+                                </ul>
+                            </div> 
+                        </div>
+                    <!--第三方网银支付 end -->
+                    </dd>
+            	</dl>
+                <div class="order-payment-action-area">                    
+                    <a class="button-style-5 button-confirm-payment" href="javascript:void(0);" onClick="pay()" >确认支付方式</a>
+                </div>
+            </div>
+        </div>
+        <input type="hidden" name="order_id" value="{$order['order_id']}" />
+       </form>
+    </div>
+<script>
+    $(document).ready(function(){
+         $("input[name='pay_radio']").first().trigger('click');
+    });
+    // 切换支付方式
+    function change_pay(obj)
+    {
+        $(obj).parent().siblings('input[name="pay_radio"]').trigger('click');
+    }
+    //确认支付
+    function pay(){
+        //询问框
+        layer.confirm('模拟支付过程，点击"支付"按钮，表示支付成功，点击"取消"，表示支付失败', {
+            btn: ['支付','取消'] //按钮
+        }, function(){
+            var order_sn = $('#order_sn').attr('value');
+            updatePayStatus(order_sn);
+        }, function(){
+            layer.msg('取消支付', {icon:2,time: 1000});
+        });
+    }
+
+    //更改支付状态
+    function updatePayStatus(order_sn){
+        $.ajax({
+            url:"{:U('getPay')}",
+            type:"POST",
+            data:{order_sn:order_sn},
+            success:function(res){
+                if(res == 1){
+                    layer.msg('支付成功', {icon:1,time: 1000});
+                    location.href = "{:U('Home/User/order_list')}"; //跳转到“我的订单”
+                }else{
+                    layer.msg('取消支付', {icon:2,time: 1000});
+                }
+            }
+        });
+    }
+</script>    
+<!--------footer-开始-------------->
+<include file="Public/footer" />
+<!--------footer-结束-------------->
+</body>
+</html>

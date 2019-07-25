@@ -1,0 +1,48 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>用户中心-{$shop_config['shop_info_store_title']}</title>
+    <meta http-equiv="keywords" content="{$shop_config['shop_info_store_keyword']}" />
+    <meta name="description" content="{$shop_config['shop_info_store_desc']}" />
+</head>
+
+<body>
+<!--------头部开始-------------->
+<include file="Public/header" />
+<!--------头部结束-------------->
+<div class="layout pa-to-10 fo-fa-ar">
+    <!--菜单-->
+    <include file="User/menu" />
+    <!--菜单-->
+    <div class="fr wi940">
+        <div class="myhome-welcome pa-to-20">
+            <div class="fl myhome-tx">
+                <div class="w-img"><img src="{$user.head_pic|default='__STATIC__/images/img88.jpg'}" alt=""></div>
+                <div class="w-vip po-ab"><i class="w-v0"></i></div>
+            </div>
+            <div class="ov-hi ma-le-158">
+                <h2 class="n-name">{$user.nickname}，欢迎您！</h2>
+                <div class="w-info">
+					<span>等级：{$level[$user['level']][level_name]}</span>
+                    <span>
+                        <span><a class="link-non-validated" href="">已验证手机</a></span>
+                    </span>
+                    <span>
+                        <span><a class="link-non-validated" href="">已验证邮箱</a></span>
+                    </span>
+                </div>
+            </div>
+            <div class="clickshop">
+            	<p>-- 欢迎光临51购商城 --</p>
+                <p style="margin-top:20px"><a href="/"><span>开始购物</span></a></p>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="he80"></div>
+<!--------footer-开始-------------->
+<include file="Public/footer" />
+<!--------footer-结束-------------->
+</body>
+</html>

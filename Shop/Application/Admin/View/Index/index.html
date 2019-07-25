@@ -1,0 +1,130 @@
+<extend name="Public/common"/> <!-- 继承模板 -->
+<block name="main">
+    <div id="page-wrapper" class="gray-bg">
+        <include file="Public/nav-header"/>
+        <div class="wrapper wrapper-content">
+            <div class="row">
+                <div class="col-sm-3">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <span class="label label-success pull-right">全年</span>
+                            <h5>营业额</h5>
+                        </div>
+                        <div class="ibox-content">
+                            <h1 class="no-margins">{$all_year_amount}</h1>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <span class="label label-info pull-right">全年</span>
+                            <h5>订单</h5>
+                        </div>
+                        <div class="ibox-content">
+                            <h1 class="no-margins">{$all_year_tnum}</h1>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <span class="label label-primary pull-right">全部</span>
+                            <h5>商品</h5>
+                        </div>
+                        <div class="ibox-content">
+                            <h1 class="no-margins">{$total_goods}</h1>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <span class="label label-danger pull-right">最近一个月</span>
+                            <h5>会员</h5>
+                        </div>
+                        <div class="ibox-content">
+                            <h1 class="no-margins">{$recent_user_number}</h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <h5>本年度每月销售额柱状图</h5>
+                        </div>
+                        <div class="ibox-content">
+                            <div class="row">
+                                <div class="col-sm-9">
+                                    <div class="flot-chart" id="main" style="width: 800px;height:400px;">
+
+                                    </div>
+                                </div>
+                                <div class="col-sm-3" style="margin-top: 100px">
+                                    <ul class="stat-list">
+                                        <li>
+                                            <h2 class="no-margins ">{$current_tnum}</h2>
+                                            <small>本月订单</small>
+                                            <div class="stat-percent"> {$current_tnum/$all_year_tnum*100|ceil} %
+                                            </div>
+                                            <div class="progress progress-mini">
+                                                <div style="width: {$current_tnum/$all_year_tnum*100|ceil}%;" class="progress-bar"></div>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <h2 class="no-margins ">{$current_amount}</h2>
+                                            <small>本月销售额</small>
+                                            <div class="stat-percent">{$current_amount / $all_year_amount * 100|ceil}%
+                                            </div>
+                                            <div class="progress progress-mini">
+                                                <div style="width: {$current_amount/$all_year_amount*100|ceil }%;" class="progress-bar"></div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="__PUBLIC__/plugins/echarts/echarts.min.js"></script>
+    <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+
+    <script type="text/javascript">
+        var res = {$result};
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('main'));
+
+        // 指定图表的配置项和数据
+        var option = {
+            color: ['#3398DB'],
+            tooltip : {
+                trigger: 'axis',
+                axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+                    type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                }
+            },
+            legend: {
+                data:['销售额']
+            },
+            xAxis: {
+                data: res.month
+            },
+            yAxis: {
+                type : 'value'
+            },
+            series: [{
+                name: '销售额',
+                type: 'bar',
+                data: res.value
+            }]
+        };
+
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+    </script>
+</block>

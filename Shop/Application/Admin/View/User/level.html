@@ -1,0 +1,84 @@
+<extend name="Public/common"/> <!-- 继承模板 -->
+<block name="main">
+    <div id="page-wrapper" class="gray-bg">
+        <include file="Public/nav-header"/>
+        <div class="wrapper wrapper-content">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="panel panel-default">
+                        <div class="pull-right">
+                            <a href="javascript:history.go(-1)" data-toggle="tooltip" title="" class="btn btn-default" data-original-title="返回"><i class="fa fa-reply"></i></a>
+                        </div>
+                        <div class="panel-heading">
+                            <h3 class="panel-title"><i class="fa fa-list"></i> 添加会员等级</h3>
+                        </div>
+                        <div class="panel-body ">
+                            <!--表单数据-->
+                            <form id="handleposition" >
+                                <!--通用信息-->
+                                <div class="tab-content col-md-10">
+                                    <div class="tab-pane active" id="tab_tongyong">
+                                        <table class="table table-bordered">
+                                            <tbody>
+                                            <tr>
+                                                <td class="col-sm-2">等级名称：</td>
+                                                <td class="col-sm-4">
+                                                    <input type="text" class="form-control" name="level_name" value="{$info.level_name}" >
+                                                    <span id="err_attr_name" style="color:#F00; display:none;"></span>
+                                                </td>
+                                                <td class="col-sm-4">设置会员等级名称
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>消费额度：</td>
+                                                <td >
+                                                    <input type="text" class="form-control" name="amount" value="{$info.amount}">
+                                                </td>
+                                                <td class="col-sm-4">设置会员等级所需要的消费额度</td>
+                                            </tr>
+                                            <tr>
+                                                <td>等级描述：</td>
+                                                <td>
+                                                    <textarea rows="5" cols="30" name="describe">{$info.describe}</textarea>
+                                                </td>
+                                                <td class="col-sm-4">会员等级描述信息</td>
+                                            </tr>
+                                            </tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <td><input type="hidden" name="act" value="{$act}">
+                                                        <input type="hidden" name="level_id" value="{$info.level_id}">
+                                                    </td>
+                                                    <td class="col-sm-4"></td>
+                                                    <td class="text-right">
+                                                        <button type="button" onclick="adsubmit()" class="btn btn-primary">保存</button>
+                                                    </td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                </div>
+                            </form><!--表单数据-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<script>
+    function adsubmit(){
+        $.ajax({
+            url:"{:U('levelHandle')}",
+            type:"post",
+            data:$("form").serialize(),
+            success:function(res){
+                if(res.status == 1){
+                    layer.msg(res.msg,{icon:1,time:1000},function(){
+                        location.href = "{:U('Admin/User/levelList')}";
+                    });
+                }
+            }
+        });
+    }
+</script>
+</block>

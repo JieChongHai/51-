@@ -1,0 +1,94 @@
+<extend name="Public/common"/> <!-- 继承模板 -->
+<block name="main">
+    <div id="page-wrapper" class="gray-bg">
+        <include file="Public/nav-header"/>
+        <div class="wrapper wrapper-content">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <h5>评论回复</h5>
+                        </div>
+                        <div class="ibox-content">
+                            <div class="row">
+                                <div class="box-body">
+                                    <div class="direct-chat-msg" id="userComment">
+                                        <div class="direct-chat-info clearfix">
+                                            <span class="direct-chat-name pull-left"><!--用户名 --></span>
+                                            <span class="direct-chat-timestamp pull-right">{$comment.add_time|date="Y-m-d H:i",###}</span>
+                                        </div>
+                                        <img alt="{$comment.username}" src="{:getUserAvatar($comment.user_id)}" class="direct-chat-img"><!-- /.direct-chat-img -->
+                                        <div class="direct-chat-text">
+                                            {$comment.content}
+                                        </div>
+                                    </div>
+                                    <foreach name="reply" item="v" >
+                                        <div class="direct-chat-msg right">
+                                            <div class="direct-chat-info clearfix">
+                                                <span class="direct-chat-name pull-right"><!--管理员 --></span>
+                                                <span class="direct-chat-timestamp pull-left">{$v.add_time|date="Y-m-d H:i",###}</span>
+                                            </div>
+                                            <img alt="管理员" src="__PUBLIC__/images/profile_small.jpg" class="direct-chat-img">
+                                            <div class="direct-chat-text">
+                                                {$v.content}
+                                            </div>
+                                        </div>
+                                    </foreach>
+                                </div>
+                            </div>
+                            <div class="panel panel-default">
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <form id="addComment">
+                                                <input type="hidden" name="comment_id" value="{$comment.comment_id}">
+                                                <textarea class="form-control" rows="3" placeholder="请输入回复内容" name="content"></textarea>
+                                                <div class="form-group"><button type="button" class="btn btn-primary pull-right margin" onclick="addComment()">回复</button></div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function addComment(){
+            $.ajax({
+                type: 'post',
+                url: "{:U('addComment')}",
+                data: $("form").serialize(),
+                success: function(res) {
+                    if(res.status == 1){
+                        layer.msg(res.msg,{icon:1,time:1000},function(){
+                            //追加评论内容
+                            var html = '';
+                            var html = '<div class="direct-chat-msg right"> ' +
+                                    '<div class="direct-chat-info clearfix">' +
+                                    '<span class="direct-chat-name pull-right"></span>' +
+                                    '<span class="direct-chat-timestamp pull-left">'
+                                    + res.data.add_time +
+                                    '</span></div>' +
+                                    '<img alt="管理员" src="__PUBLIC__/images/profile_small.jpg" class="direct-chat-img">' +
+                                    '<div class="direct-chat-text">'
+                                    + res.data.content +
+                                    '</div></div>';
+                            $("#userComment").after(html);
+                            $("textarea").val('');
+                        });
+                    }else{
+                        layer.msg(res.msg,{icon:2,time:1000});
+                    }
+                }
+            });
+        }
+    </script>
+
+
+
+
+</block>

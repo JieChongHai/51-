@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>帮助中心-{$shop_config['shop_info_store_title']}</title>
+<meta http-equiv="keywords" content="{$shop_config['shop_info_store_keyword']}" />
+<meta name="description" content="{$shop_config['shop_info_store_desc']}" />
+<link rel="stylesheet" href="__PUBLIC__/css/helpcenter.css" type="text/css">
+</head>
+<body>
+<!--------头部开始-------------->
+<include file="Public/header" />
+
+<div class="w main" style="margin-left: 75px">
+	<div class="content">
+		<div class="breadcrumb">
+			<span id="sLevel1">帮助中心</span>
+			&gt;
+			<a href="#"><span id="sLevel2">{$cat_name}</span></a>
+
+		</div>
+
+		<div class="contxt">
+			<div class="help-tit1 flk06">{$article.title}</div>
+			<div class="help_box" style="margin: 0px; padding: 10px 10px 10px 20px; color: rgb(102, 102, 102); line-height: 18px; font-family: Arial, Verdana, 宋体; font-size: 12px; white-space: normal; background-color: rgb(255, 255, 255);">
+				<p style="padding: 0px; margin-top: 0px; margin-bottom: 0px;"><br>
+					{$article.content|htmlspecialchars_decode}
+					<!--html_entity_decode-->
+				</p>
+			</div>
+		</div>
+	</div>
+</div>
+<!--------footer-开始-------------->
+<include file="Public/footer" />
+<!--------footer-结束-------------->
+
+</div>
+</body>
+<script type="text/javascript">
+
+$(function(){
+	  $(".all-selfservice-box .lump-list").hover(function(){$(this).addClass("hover")},function(){$(this).removeClass("hover")})
+	  $(".subside-mod .title").click(
+	    function(){
+	      if($(this).parent(".subside-mod").hasClass("on")){
+	    	  $(this).parent(".subside-mod").removeClass("on")
+	      }else{
+	        $(this).parent(".subside-mod").addClass("on")
+	      }
+	    });
+	  
+});
+</script>
+</html>
